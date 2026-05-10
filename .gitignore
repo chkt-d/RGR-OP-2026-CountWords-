@@ -1,0 +1,18 @@
+# GNU Pascal / build artifacts
+*.o
+*.gpi
+*.exe
+
+# Program output
+Statistics.txt
+statistics.txt
+
+# Temporary/editor files
+*.bak
+*.tmp
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
