@@ -17,6 +17,7 @@ PROCEDURE CopyWord(Source: StrPtr; VAR Dest: StrPtr);
 FUNCTION CompareTwoWords(FirstWord, SecondWord: StrPtr): INTEGER;
 PROCEDURE PrintWord(VAR OutFile: TEXT; Word: StrPtr);
 PROCEDURE AppendChar(VAR Word: StrPtr; Ch: CHAR);
+FUNCTION CharOrder(Ch: CHAR): INTEGER;
 
 IMPLEMENTATION
 
