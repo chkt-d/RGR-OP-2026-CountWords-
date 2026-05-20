@@ -8,7 +8,7 @@ VAR
   F, OutF: TEXT;
   TempF: BinStatsFile;                                                                              
   
-BEGIN
+BEGIN {CountWords}
   InitStats(Stats);
   ASSIGN(F, 'TEXT.txt'); 
   RESET(F);
@@ -39,4 +39,4 @@ BEGIN
   DisposeStats(FinalStats);
   CLOSE(F);
   CLOSE(OutF);
-END.
+END {CountWords}.

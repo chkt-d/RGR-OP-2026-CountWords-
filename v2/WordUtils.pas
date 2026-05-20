@@ -129,8 +129,6 @@ BEGIN {DisposeWord}
     END
 END; {DisposeWord}
 
-//------------------------------------
-
 FUNCTION IsLetter(Ch: CHAR): BOOLEAN;
 {Проверяет, является ли символ буквой русского или латинского алфавита}
 BEGIN {IsLetter}

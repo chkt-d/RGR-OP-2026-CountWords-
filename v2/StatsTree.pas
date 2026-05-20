@@ -43,43 +43,43 @@ FUNCTION StatsIsFull(Stats: StatsType): BOOLEAN;
 IMPLEMENTATION
 
 FUNCTION StatsIsFull(Stats: StatsType): BOOLEAN;
-BEGIN
+BEGIN {StatsIsFull} 
   StatsIsFull := Stats.NodeCount >= MaxTreeNodes
-END;
+END {StatsIsFull};
 
 FUNCTION Max(A, B: INTEGER): INTEGER;
-BEGIN
+BEGIN {Max}
   IF A > B
   THEN 
     Max := A
   ELSE
     Max := B
-END;
+END {Max};
 
 FUNCTION NodeHeight(Node: TreePtr): INTEGER;
-BEGIN
+BEGIN {NodeHeight}
   IF Node = NIL
   THEN 
     NodeHeight := 0
   ELSE
     NodeHeight := Node^.Height
-END;
+END {NodeHeight};
 
 PROCEDURE UpdateHeight(Node: TreePtr);
-BEGIN
+BEGIN {UpdateHeight}
   IF Node <> NIL
   THEN
     Node^.Height := Max(NodeHeight(Node^.Left), NodeHeight(Node^.Right)) + 1
-END;
+END {UpdateHeight};
 
 FUNCTION BalanceFactor(Node: TreePtr): INTEGER;
-BEGIN
+BEGIN {BalanceFactor}
   IF Node = NIL
   THEN
     BalanceFactor := 0
   ELSE
     BalanceFactor := NodeHeight(Node^.Left) - NodeHeight(Node^.Right) 
-END;
+END {BalanceFactor};
 
 PROCEDURE InitStats(VAR Stats: StatsType);
 BEGIN
@@ -88,19 +88,19 @@ BEGIN
 END;
 
 PROCEDURE CreateWordNode(Word: StrPtr; Count: LONGINT; VAR Node: TreePtr);
-BEGIN
+BEGIN {CreateWordNode}
   NEW(Node);
   CopyWord(Word, Node^.Word);
   Node^.Count := Count;
   Node^.Left := NIL;
   Node^.Right := NIL;
   Node^.Height := 1
-END;
+END {CreateWordNode};
 
 FUNCTION RotateRight(Y: TreePtr): TreePtr;
 VAR
   X, T2: TreePtr;
-BEGIN
+BEGIN {RotateRight}
   X := Y^.Left;
   T2 := X^.Right;
   X^.Right := Y;
@@ -108,12 +108,12 @@ BEGIN
   UpdateHeight(Y);
   UpdateHeight(X);
   RotateRight := X
-END;
+END {RotateRight};
 
 FUNCTION RotateLeft(X: TreePtr): TreePtr;
 VAR
   Y, T2: TreePtr;
-BEGIN
+BEGIN {RotateLeft}
   Y := X^.Right;
   T2 := Y^.Left;
   Y^.Left := X;
@@ -121,12 +121,12 @@ BEGIN
   UpdateHeight(X);
   UpdateHeight(Y);
   RotateLeft := Y
-END;
+END {RotateLeft};
 
 FUNCTION BalanceNode(Node: TreePtr): TreePtr;
 VAR
   Balance: INTEGER;
-BEGIN
+BEGIN {BalanceNode}
   UpdateHeight(Node);
   Balance := BalanceFactor(Node);
   IF Balance > 1
@@ -148,12 +148,12 @@ BEGIN
       END
     ELSE
       BalanceNode := Node
-END;
+END {BalanceNode};
 
 PROCEDURE InsertNode(VAR Root: TreePtr; Word: StrPtr; Count: LONGINT; VAR NodeCount: LONGINT);
 VAR
   CompResult: INTEGER;
-BEGIN
+BEGIN {InsertNode}
   IF Root = NIL
   THEN
     BEGIN
@@ -169,19 +169,19 @@ BEGIN
         1: InsertNode(Root^.Right, Word, Count, NodeCount)
       END;
       Root := BalanceNode(Root)
-    END
+    END {InsertNode}
 END;
 
 PROCEDURE UpdateStats(VAR Stats: StatsType; Word: StrPtr);
-BEGIN
+BEGIN {UpdateStats}
   InsertNode(Stats.Root, Word, 1, Stats.NodeCount)
-END;
+END; {UpdateStats}
 
 PROCEDURE WordToBinRecord(Word: StrPtr; Count: LONGINT; VAR Rec: BinWord);
 VAR
   I: INTEGER;
   Cur: StrPtr;
-BEGIN
+BEGIN {WordToBinRecord}
   Rec.Len := 0;
   Rec.Count := Count;
   
@@ -199,29 +199,29 @@ BEGIN
       ELSE
         Rec.Chars[I] := ' '
     END
-END;
+END {WordToBinRecord};
 
 PROCEDURE BinRecordToWord(Rec: BinWord; VAR Word: StrPtr);
 VAR
   I: INTEGER;
-BEGIN
+BEGIN {BinRecordToWord}
   Word := NIL;
   
   FOR I := 1 TO Rec.Len
   DO
     AppendChar(Word, Rec.Chars[I])
-END;
+END {BinRecordToWord};
 
 PROCEDURE AddWordCount(VAR Stats: StatsType; Word: StrPtr; Count: LONGINT);
-BEGIN
+BEGIN {AddWordCount}
   InsertNode(Stats.Root, Word, Count, Stats.NodeCount)
-END;
+END {AddWordCount};
 
 PROCEDURE LoadBinaryToStats(VAR TempFile: BinStatsFile; VAR Stats: StatsType);
 VAR
   Rec: BinWord;
   Word: StrPtr;
-BEGIN
+BEGIN {LoadBinaryToStats}
   RESET(TempFile);
   WHILE NOT EOF (TempFile)
   DO
@@ -231,12 +231,12 @@ BEGIN
       AddWordCount(Stats, Word, Rec.Count);
       DisposeWord(Word)
     END
-END;
+END; {LoadBinaryToStats}
 
 PROCEDURE FlushTreeToBinary(VAR TempFile: BinStatsFile; Root: TreePtr);
 VAR
   Rec: BinWord;
-BEGIN
+BEGIN {FlushTreeToBinary}
   IF Root <> NIL
   THEN
     BEGIN
@@ -245,10 +245,10 @@ BEGIN
       WRITE(TempFile, Rec);
       FlushTreeToBinary(TempFile, Root^.Right)
     END
-END;
+END {FlushTreeToBinary};
 
 PROCEDURE PrintTree(VAR OutFile: TEXT; Root: TreePtr);
-BEGIN
+BEGIN {PrintTree}
   IF Root <> NIL
   THEN
     BEGIN
@@ -258,15 +258,15 @@ BEGIN
       WRITELN(OutFile, Root^.Count);
       PrintTree(OutFile, Root^.Right)
     END
-END;
+END {PrintTree};
 
 PROCEDURE PrintStats(VAR OutFile: TEXT; Stats: StatsType);
-BEGIN
+BEGIN {PrintStats}
   PrintTree(OutFile, Stats.Root)
-END;
+END; {PrintStats}
 
 PROCEDURE DisposeTree(VAR Root: TreePtr);
-BEGIN
+BEGIN {DisposeTree}
   IF Root <> NIL
   THEN
     BEGIN
@@ -276,18 +276,18 @@ BEGIN
       DISPOSE(Root);
       Root := NIL
     END
-END;
+END {DisposeTree};
 
 PROCEDURE DisposeStats(VAR Stats: StatsType);
-BEGIN
+BEGIN {DisposeStats}
   DisposeTree(Stats.Root);
   Stats.NodeCount := 0
-END;
+END; {DisposeStats}
 
 PROCEDURE FlushStatsToBinary(VAR TempFile: BinStatsFile; VAR Stats: StatsType);
-BEGIN
+BEGIN {FlushStatsToBinary}
   FlushTreeToBinary(TempFile, Stats.Root);
   DisposeStats(Stats)
-END;
+END; {FlushStatsToBinary}
 
 END.
