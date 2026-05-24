@@ -1,9 +1,7 @@
 PROGRAM CountWords(INPUT, OUTPUT);
-USES WordStats;
+USES WordUtils, ManageStats;
 
 VAR
-  Stats: WordPtr;
-  Word: StrPtr; 
   F, OutF: TEXT;                                                                              
   
 BEGIN
