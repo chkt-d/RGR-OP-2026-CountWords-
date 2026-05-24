@@ -1,62 +1,27 @@
 PROGRAM CountWords(INPUT, OUTPUT);
 
-USES WordUtils, StatsTree;
+USES WordUtils, StatsManager;
 
 VAR
-  Stats: StatsType;
-  Word: StrPtr; 
-  F, OutF: TEXT;
-  MainTempF, ChunkTempF, MergeTempF: BinStatsFile;                                                                              
+  F, OutF: TEXT;                                                                            
   
 BEGIN {CountWords}
-  InitStats(Stats);
+  InitStatsSystem(Sys);
   ASSIGN(F, 'TEXT.txt'); 
   RESET(F);
-  ASSIGN(MainTempF, 'MainTemp.bin');
-  ASSIGN(ChunkTempF, 'ChunkTemp.bin');
-  ASSIGN(MergeTempF, 'MergeTemp.bin');
-  REWRITE(MainTempF);
-  CLOSE(MainTempF);
 
   WHILE ReadWord(F, Word)
   DO
     BEGIN
       NormaliseWord(Word);
-      UpdateStats(Stats, Word);
+      UpdateStatsSystem(Sys, Word);
       DisposeWord(Word);
-      IF StatsIsFull(Stats)
-      THEN
-        BEGIN
-          REWRITE(ChunkTempF);
-          FlushStatsToBinary(ChunkTempF, Stats);
-          CLOSE(ChunkTempF);
-          MergeBinaryStats(MainTempF, ChunkTempF, MergeTempF);
-          CopyBinaryFile(MergeTempF, MainTempF)
-        END
     END;
-  IF Stats.Root <> NIL
-  THEN
-    BEGIN
-      REWRITE(ChunkTempF);
-      FlushStatsToBinary(ChunkTempF, Stats);
-      CLOSE(ChunkTempF);
-      MergeBinaryStats(MainTempF, ChunkTempF, MergeTempF);
-      CopyBinaryFile(MergeTempF, MainTempF)
-    END;
+  CLOSE(F);
 
   ASSIGN(OutF, 'Statistics.txt');       
   REWRITE(OutF);
-  PrintBinaryStats(MainTempF, OutF);
-
-  CLOSE(F);
+  PrintFinalStats(Sys, OutF);
   CLOSE(OutF);
-  
-  REWRITE(MainTempF);
-  CLOSE(MainTempF);
-
-  REWRITE(ChunkTempF);
-  CLOSE(ChunkTempF);
-
-  REWRITE(MergeTempF);
-  CLOSE(MergeTempF)
+  DoneStatsSystem(Sys)
 END {CountWords}.

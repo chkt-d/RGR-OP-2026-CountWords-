@@ -1,15 +1,18 @@
 UNIT WordUtils;
 
 INTERFACE
-
+  
 TYPE
   StrPtr = ^StrNode;
 
   StrNode = RECORD
-    Ch: CHAR;
-    Next: StrPtr
-  END;
+              Ch: CHAR;
+              Next: StrPtr
+            END;
 
+VAR
+  Word: StrPtr;
+  
 FUNCTION ReadWord(VAR InFile: TEXT; VAR Word: StrPtr): BOOLEAN;
 PROCEDURE NormaliseWord(Word: StrPtr);
 PROCEDURE DisposeWord(VAR Word: StrPtr);
