@@ -1,14 +1,8 @@
 UNIT WordUtils;
 
 INTERFACE
-  
-TYPE
-  StrPtr = ^StrNode;
 
-  StrNode = RECORD
-              Ch: CHAR;
-              Next: StrPtr
-            END;
+USES DataTypes;
 
 VAR
   Word: StrPtr;

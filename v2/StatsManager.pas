@@ -2,7 +2,7 @@ UNIT StatsManager;
 
 INTERFACE
 
-USES DataTypes, WordUtils;
+USES DataTypes;
 
 TYPE
   StatsSystem = RECORD

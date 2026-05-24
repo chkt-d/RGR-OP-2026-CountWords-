@@ -2,11 +2,16 @@ UNIT DataTypes;
 
 INTERFACE
 
-USES WordUtils, Config;
+USES Config;
 
 TYPE
-  TreePtr = ^TreeNode;
+  StrPtr = ^StrNode;
+  StrNode = RECORD
+              Ch: CHAR;
+              Next: StrPtr
+            END;
 
+  TreePtr = ^TreeNode;
   TreeNode = RECORD
     Word: StrPtr;
     Count: LONGINT;
@@ -14,7 +19,6 @@ TYPE
     Left: TreePtr;
     Height: INTEGER
   END;
-
   StatsType = RECORD
     Root: TreePtr;
     NodeCount: LONGINT;
@@ -25,7 +29,5 @@ TYPE
               Chars: ARRAY [1..MaxBinWordLen] OF CHAR;
               Count: LONGINT
             END;
-
   BinStatsFile = FILE OF BinWord;
-
 END.

@@ -2,7 +2,7 @@ UNIT AVLTree;
 
 INTERFACE
 
-USES DataTypes, WordUtils, Config;
+USES DataTypes, Config;
 
 PROCEDURE InitStats(VAR Stats: StatsType); 
 PROCEDURE UpdateStats(VAR Stats: StatsType; Word: StrPtr); 
@@ -11,6 +11,8 @@ PROCEDURE FlushStatsToBinary(VAR TempFile: BinStatsFile; VAR Stats: StatsType);
 PROCEDURE DisposeStats(VAR Stats: StatsType);
   
 IMPLEMENTATION
+
+USES WordUtils;
 
 FUNCTION StatsIsFull(Stats: StatsType): BOOLEAN;
 BEGIN {StatsIsFull} 

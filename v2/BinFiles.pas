@@ -2,13 +2,15 @@ UNIT BinFiles;
 
 INTERFACE
 
-USES DataTypes, WordUtils, Config;
+USES DataTypes, Config;
 
 PROCEDURE MergeBinaryStats(VAR MainFile, ChunkFile, MergeFile: BinStatsFile);
 PROCEDURE CopyBinaryFile(VAR SourceFile, DestFile: BinStatsFile);
 PROCEDURE PrintBinaryStats(VAR BinFile: BinStatsFile; VAR OutFile: TEXT); 
 
 IMPLEMENTATION
+
+USES WordUtils;
 
 FUNCTION CompareBinWords(First, Second: BinWord): INTEGER;
 VAR
