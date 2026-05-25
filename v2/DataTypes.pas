@@ -13,16 +13,16 @@ TYPE
 
   TreePtr = ^TreeNode;
   TreeNode = RECORD
-    Word: StrPtr;
-    Count: LONGINT;
-    Right: TreePtr;
-    Left: TreePtr;
-    Height: INTEGER
-  END;
+               Word: StrPtr;
+               Count: LONGINT;
+               Right: TreePtr;
+               Left: TreePtr;
+               Height: INTEGER
+            END;
   StatsType = RECORD
-    Root: TreePtr;
-    NodeCount: LONGINT;
-  END;
+                Root: TreePtr;
+                NodeCount: LONGINT;
+              END;
 
   BinWord = RECORD
               Len: INTEGER;

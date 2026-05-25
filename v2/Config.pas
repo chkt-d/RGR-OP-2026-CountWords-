@@ -3,7 +3,7 @@ UNIT Config;
 INTERFACE
 
 CONST
-  MaxTreeNodes = 100000;
+  MaxTreeNodes = 4;
   MaxBinWordLen = 255;
 
 END.

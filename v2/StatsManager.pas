@@ -41,7 +41,6 @@ BEGIN
   REWRITE(System.ChunkFile);
   FlushStatsToBinary(System.ChunkFile, System.Stats);
   CLOSE(System.ChunkFile);
-  DisposeStats(System.Stats);
   MergeBinaryStats(System.MainFile, System.ChunkFile, System.MergeFile);
   CopyBinaryFile(System.MergeFile, System.MainFile)
 END;
